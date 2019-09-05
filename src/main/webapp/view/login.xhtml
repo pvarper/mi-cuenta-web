@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"> 
+
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="x-ua-compatible" content="IE=9" />
+	</f:facet>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta content="private ,no-cache, no-store, must-revalidate"
+		http-equiv="Cache-Control" />
+	<meta content="no-cache" http-equiv="Pragma" />
+	<meta content="0" http-equiv="Expires" />
+
+	<title>Mi Web</title>
+
+</h:head>
+
+<body>
+
+	<p:layout fullPage="true"
+		style="background-color: #FFFFFF; border-color: #FFFFFF;">
+		<p:layoutUnit position="north" resizable="true" size="100" border="0"
+			minSize="40" maxSize="200">
+		</p:layoutUnit>
+
+		<p:layoutUnit position="center">
+
+			<h:form id="frmLogin">
+				<center>
+					INICIAR SESIÓN
+
+					<h:panelGrid columns="2">
+
+						<p:outputLabel value="Login"></p:outputLabel>
+						<p:inputText maxlength="12" size="30"></p:inputText>
+
+						<p:outputLabel value="Password"></p:outputLabel>
+						<p:password maxlength="12" size="30">
+						</p:password>
+
+
+					</h:panelGrid>
+					<br />
+
+					<h:panelGrid columns="2">
+
+						<p:commandButton value="Login" icon="ui-icon-account-box"
+							actionListener="#{loginBean.loginUsuario()}"
+							update=":dlgDatosCuenta">
+						</p:commandButton>
+						<p:commandButton value="Registrarse" icon="ui-icon-account-circle"
+							actionListener="#{loginBean.setDialogRegistrarUsuario(true)}"
+							update=":dlgRegistrarse">
+						</p:commandButton>
+
+					</h:panelGrid>
+
+
+				</center>
+
+
+
+			</h:form>
+
+		</p:layoutUnit>
+	</p:layout>
+	<p:confirmDialog global="true">
+		<p:commandButton value="Si" type="button"
+			styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+		<p:commandButton value="No" type="button"
+			styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	</p:confirmDialog>
+
+	<p:dialog id="dlgDatosCuenta" style="width: 70%; height: 70%;"
+		closeOnEscape="false" closable="false" header="Datos de la cuenta"
+		modal="true" resizable="false"
+		visible="#{loginBean.isDialogDatosCuentaVisible()}" appendTo="@(body)">
+
+		<h:form id="frmDatosCuenta">
+			<h:panelGrid columns="2" columnClasses="no-border, no-border">
+				<p:panel>
+					<h:panelGrid columns="2">
+
+						<p:outputLabel value="CI"></p:outputLabel>
+						<p:inputText maxlength="12" size="30"></p:inputText>
+
+						<p:outputLabel value="Nombre"></p:outputLabel>
+						<p:inputText maxlength="12" size="30"></p:inputText>
+
+						<p:outputLabel value="Apellidos"></p:outputLabel>
+						<p:inputText maxlength="12" size="30"></p:inputText>
+
+						<p:outputLabel value="Teléfono"></p:outputLabel>
+						<p:inputText maxlength="12" size="30"></p:inputText>
+
+
+						<p:outputLabel value="Saldo"></p:outputLabel>
+						<p:inputText maxlength="12" size="30" readonly="true"></p:inputText>
+					</h:panelGrid>
+
+					<p:commandButton value="Editar Datos" icon="ui-icon-account-circle">
+					</p:commandButton>
+
+				</p:panel>
+
+				<br />
+
+				<p:panel>
+
+					<h:panelGrid columns="2" columnClasses="no-border, no-border">
+						<p:outputLabel value="Monto"></p:outputLabel>
+						<p:commandButton value="Depositar" icon="ui-icon-account-circle">
+							<p:confirm header="Confirmación"
+								message="¿Está seguro que desea realizar esta transaccion?"
+								icon="ui-icon-alert" />
+
+						</p:commandButton>
+
+						<p:inputText maxlength="12" size="30"></p:inputText>
+						<p:commandButton value="retirar" icon="ui-icon-account-circle">
+							<p:confirm header="Confirmación"
+								message="¿Está seguro que desea realizar esta transaccion?"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+					</h:panelGrid>
+
+				</p:panel>
+			</h:panelGrid>
+
+
+			<br />
+
+
+
+
+
+			<p:commandButton value="Cerrar Sesion" icon="ui-icon-account-circle"
+				actionListener="#{loginBean.setDialogDatosCuentaVisible(false)}"
+				update=":dlgDatosCuenta :frmLogin">
+			</p:commandButton>
+
+		</h:form>
+
+	</p:dialog>
+
+
+
+	<p:dialog id="dlgRegistrarse" style="width: 70%; height: 70%;"
+		closeOnEscape="false" closable="false" header="Registrarse"
+		modal="true" resizable="false"
+		visible="#{loginBean.isDialogRegistrarUsuario()}" appendTo="@(body)">
+
+		<h:form id="frmDatosRegistro">
+			<h:panelGrid columns="2" columnClasses="no-border, no-border">
+				<p:panel>
+					<h:panelGrid columns="2">
+
+						<p:outputLabel value="CI"></p:outputLabel>
+						<p:inputText maxlength="12" size="30"></p:inputText>
+
+						<p:outputLabel value="Login"></p:outputLabel>
+						<p:inputText maxlength="12" size="30"></p:inputText>
+
+						<p:outputLabel value="Password"></p:outputLabel>
+						<p:password maxlength="12" size="30"></p:password>
+
+						<p:outputLabel value="Nombre"></p:outputLabel>
+						<p:inputText maxlength="12" size="30"></p:inputText>
+
+						<p:outputLabel value="Apellidos"></p:outputLabel>
+						<p:inputText maxlength="12" size="30"></p:inputText>
+
+						<p:outputLabel value="Teléfono"></p:outputLabel>
+						<p:inputText maxlength="12" size="30"></p:inputText>
+
+
+						<p:outputLabel value="Saldo"></p:outputLabel>
+						<p:inputText maxlength="12" size="30"></p:inputText>
+					</h:panelGrid>
+
+					<p:commandButton value="Registrarse" icon="ui-icon-account-circle"
+						actionListener="#{loginBean.registrarUsuario()}"
+						update=":dlgRegistrarse">
+
+					</p:commandButton>
+
+				</p:panel>
+
+				<br />
+
+
+			</h:panelGrid>
+
+
+			<br />
+
+
+
+
+
+			<p:commandButton value="Salir" icon="ui-icon-account-circle"
+				actionListener="#{loginBean.setDialogRegistrarUsuario(false)}"
+				update=":dlgRegistrarse :frmLogin">
+			</p:commandButton>
+
+		</h:form>
+
+	</p:dialog>
+
+
+
+
+
+</body>
+
+</html>
