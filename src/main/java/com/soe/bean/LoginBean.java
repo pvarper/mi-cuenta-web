@@ -119,7 +119,42 @@ public class LoginBean implements Serializable {
 		
 		restClient.obtenerClientePorLogin(cliente.getLogin());
 		cliente = restClient.obtenerClientePorLogin(cliente.getLogin());
+		this.monto=0;
 
+	}
+	
+	public void editarCliente() {
+		RestClient restClient = new RestClient();
+		String validacion = validateRegistroCliente();
+		if (!validacion.isEmpty()) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", validacion));
+			return;
+
+		}
+		
+		if (!restClient.eliminarClientePorLogin(cliente.getLogin())) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR",
+					"Error Al eliminar el cliente: " + cliente.getLogin()));
+			return;
+		}
+
+		if (!restClient.guardarCliente(cliente)) {
+
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro",
+					"Error al registrar, contacte al adminsitrador"));
+			return;
+		}
+
+		
+		restClient.obtenerClientePorLogin(cliente.getLogin());
+		cliente = restClient.obtenerClientePorLogin(cliente.getLogin());
+		this.monto=0;
+		
+
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Editar", "Se edito correctamente"));
+		
 	}
 
 	public void registrarUsuario() {
@@ -231,7 +266,55 @@ public class LoginBean implements Serializable {
 			return "Nombre: solo se permiten letras";
 		}
 
-		if (!Pattern.matches("^[a-zA-Z0-9\\s]+$", cliente.getApellidos())) {
+		if (!Pattern.matches("^[a-zA-Z\\s]+$", cliente.getApellidos())) {
+			return "Apellido: solo se permiten letras";
+		}
+
+		if (!Pattern.matches("^[0-9]+$", cliente.getCi())) {
+			return "CI: solo se permiten numeros";
+		}
+
+		if (!Pattern.matches("^[0-9]+$", cliente.getTelefono())) {
+			return "Telefono: solo se permiten numeros";
+		}
+
+		return "";
+	}
+	
+	public String validateEditarCliente() {
+
+		if (cliente.getCi() == null)
+			return "CI invalido!";
+
+		if (cliente.getCi().trim().isEmpty())
+			return "CI no puede estar vacio";
+
+		if (cliente.getNombre() == null)
+			return "Nombre invalido!";
+
+		if (cliente.getNombre().trim().isEmpty())
+			return "Nombre no puede estar vacio";
+
+		if (cliente.getApellidos() == null)
+			return "Apellido invalido!";
+
+		if (cliente.getApellidos().trim().isEmpty())
+			return "Apellido no puede estar vacio";
+
+		if (cliente.getTelefono() == null)
+			return "Telefono invalido!";
+
+		if (cliente.getTelefono().trim().isEmpty())
+			return "Telefono no puede estar vacio";
+
+
+
+
+		if (!Pattern.matches("^[a-zA-Z\\s]+$", cliente.getNombre())) {
+			return "Nombre: solo se permiten letras";
+		}
+
+		if (!Pattern.matches("^[a-zA-Z\\s]+$", cliente.getApellidos())) {
 			return "Apellido: solo se permiten letras";
 		}
 

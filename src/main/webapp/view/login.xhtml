@@ -125,7 +125,8 @@
 						</p:inputText>
 					</h:panelGrid>
 
-					<p:commandButton value="Editar Datos" icon="ui-icon-account-circle">
+					<p:commandButton value="Editar Datos" icon="ui-icon-account-circle"
+						actionListener="#{loginBean.editarCliente()}" update=":dlgDatosCuenta">
 					</p:commandButton>
 
 				</p:panel>
