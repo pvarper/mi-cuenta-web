@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 @ManagedBean
 @ViewScoped
 public class LoginBean implements Serializable{
+	
 
 	/**
 	 * 
