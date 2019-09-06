@@ -1,9 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:h="http://java.sun.com/jsf/html"> 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html">
 
 <h:head>
 	<f:facet name="first">
@@ -22,6 +22,13 @@
 
 <body>
 
+
+
+	<p:outputPanel ajaxRendered="true">
+		<p:growl id="messages" escape="false" showDetail="true"
+			autoUpdate="true" sticky="true" />
+	</p:outputPanel>
+
 	<p:layout fullPage="true"
 		style="background-color: #FFFFFF; border-color: #FFFFFF;">
 		<p:layoutUnit position="north" resizable="true" size="100" border="0"
@@ -37,10 +44,15 @@
 					<h:panelGrid columns="2">
 
 						<p:outputLabel value="Login"></p:outputLabel>
-						<p:inputText maxlength="12" size="30"></p:inputText>
+						<p:inputText maxlength="12" size="30"
+							value="#{loginBean.cliente.login}">
+
+						</p:inputText>
 
 						<p:outputLabel value="Password"></p:outputLabel>
-						<p:password maxlength="12" size="30">
+						<p:password maxlength="12" size="30"
+							value="#{loginBean.cliente.password}">
+
 						</p:password>
 
 
@@ -55,7 +67,7 @@
 						</p:commandButton>
 						<p:commandButton value="Registrarse" icon="ui-icon-account-circle"
 							actionListener="#{loginBean.setDialogRegistrarUsuario(true)}"
-							update=":dlgRegistrarse">
+							update=":dlgRegistrarse :frmDatosRegistro">
 						</p:commandButton>
 
 					</h:panelGrid>
@@ -87,20 +99,30 @@
 					<h:panelGrid columns="2">
 
 						<p:outputLabel value="CI"></p:outputLabel>
-						<p:inputText maxlength="12" size="30"></p:inputText>
+						<p:inputText maxlength="10" size="30"
+							value="#{loginBean.cliente.ci}">
+						</p:inputText>
 
 						<p:outputLabel value="Nombre"></p:outputLabel>
-						<p:inputText maxlength="12" size="30"></p:inputText>
+						<p:inputText maxlength="20" size="30"
+							value="#{loginBean.cliente.nombre}">
+						</p:inputText>
 
 						<p:outputLabel value="Apellidos"></p:outputLabel>
-						<p:inputText maxlength="12" size="30"></p:inputText>
+						<p:inputText maxlength="40" size="30"
+							value="#{loginBean.cliente.apellidos}">
+						</p:inputText>
 
 						<p:outputLabel value="Teléfono"></p:outputLabel>
-						<p:inputText maxlength="12" size="30"></p:inputText>
+						<p:inputText maxlength="10" size="30"
+							value="#{loginBean.cliente.telefono}">
+						</p:inputText>
 
 
 						<p:outputLabel value="Saldo"></p:outputLabel>
-						<p:inputText maxlength="12" size="30" readonly="true"></p:inputText>
+						<p:inputText maxlength="12" size="30" readonly="true"
+							value="#{loginBean.cliente.saldo}">
+						</p:inputText>
 					</h:panelGrid>
 
 					<p:commandButton value="Editar Datos" icon="ui-icon-account-circle">
@@ -114,15 +136,19 @@
 
 					<h:panelGrid columns="2" columnClasses="no-border, no-border">
 						<p:outputLabel value="Monto"></p:outputLabel>
-						<p:commandButton value="Depositar" icon="ui-icon-account-circle">
+						<p:commandButton value="Depositar" icon="ui-icon-account-circle"
+							actionListener="#{loginBean.actualizarSaldoCliente(true)}"
+							update=":dlgDatosCuenta">
 							<p:confirm header="Confirmación"
 								message="¿Está seguro que desea realizar esta transaccion?"
 								icon="ui-icon-alert" />
 
 						</p:commandButton>
 
-						<p:inputText maxlength="12" size="30"></p:inputText>
-						<p:commandButton value="retirar" icon="ui-icon-account-circle">
+						<p:inputText maxlength="12" size="30" value="#{loginBean.monto}"></p:inputText>
+						<p:commandButton value="retirar" icon="ui-icon-account-circle"
+							actionListener="#{loginBean.actualizarSaldoCliente(false)}"
+							update=":dlgDatosCuenta">
 							<p:confirm header="Confirmación"
 								message="¿Está seguro que desea realizar esta transaccion?"
 								icon="ui-icon-alert" />
@@ -160,27 +186,48 @@
 				<p:panel>
 					<h:panelGrid columns="2">
 
+
+
+
+
 						<p:outputLabel value="CI"></p:outputLabel>
-						<p:inputText maxlength="12" size="30"></p:inputText>
-
-						<p:outputLabel value="Login"></p:outputLabel>
-						<p:inputText maxlength="12" size="30"></p:inputText>
-
-						<p:outputLabel value="Password"></p:outputLabel>
-						<p:password maxlength="12" size="30"></p:password>
+						<p:inputText maxlength="10" size="30"
+							value="#{loginBean.cliente.ci}">
+						</p:inputText>
 
 						<p:outputLabel value="Nombre"></p:outputLabel>
-						<p:inputText maxlength="12" size="30"></p:inputText>
+						<p:inputText maxlength="20" size="30"
+							value="#{loginBean.cliente.nombre}">
+
+						</p:inputText>
 
 						<p:outputLabel value="Apellidos"></p:outputLabel>
-						<p:inputText maxlength="12" size="30"></p:inputText>
+						<p:inputText maxlength="40" size="30"
+							value="#{loginBean.cliente.apellidos}">
+
+						</p:inputText>
 
 						<p:outputLabel value="Teléfono"></p:outputLabel>
-						<p:inputText maxlength="12" size="30"></p:inputText>
+						<p:inputText maxlength="10" size="30"
+							value="#{loginBean.cliente.telefono}">
+
+						</p:inputText>
 
 
 						<p:outputLabel value="Saldo"></p:outputLabel>
-						<p:inputText maxlength="12" size="30"></p:inputText>
+						<p:inputText maxlength="12" size="30"
+							value="#{loginBean.cliente.saldo}">
+						</p:inputText>
+
+						<p:outputLabel value="Login"></p:outputLabel>
+						<p:inputText maxlength="15" size="30"
+							value="#{loginBean.cliente.login}">
+						</p:inputText>
+
+						<p:outputLabel value="Password"></p:outputLabel>
+						<p:password maxlength="15" size="30"
+							value="#{loginBean.cliente.password}">
+						</p:password>
 					</h:panelGrid>
 
 					<p:commandButton value="Registrarse" icon="ui-icon-account-circle"
@@ -211,11 +258,5 @@
 		</h:form>
 
 	</p:dialog>
-
-
-
-
-
 </body>
-
 </html>
