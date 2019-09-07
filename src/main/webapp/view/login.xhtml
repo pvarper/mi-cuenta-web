@@ -126,7 +126,8 @@
 					</h:panelGrid>
 
 					<p:commandButton value="Editar Datos" icon="ui-icon-account-circle"
-						actionListener="#{loginBean.editarCliente()}" update=":dlgDatosCuenta">
+						actionListener="#{loginBean.editarCliente()}"
+						update=":dlgDatosCuenta">
 					</p:commandButton>
 
 				</p:panel>
@@ -155,6 +156,12 @@
 								icon="ui-icon-alert" />
 						</p:commandButton>
 					</h:panelGrid>
+					
+					<p:commandButton value="Ver Transacciones" icon="ui-icon-account-circle"
+						actionListener="#{loginBean.obtenerTransaccionPorLogin()}"
+						update=":dlgRegistrarse :dlgTransacciones">
+
+					</p:commandButton>
 
 				</p:panel>
 			</h:panelGrid>
@@ -236,6 +243,8 @@
 						update=":dlgRegistrarse">
 
 					</p:commandButton>
+					
+					
 
 				</p:panel>
 
@@ -254,6 +263,63 @@
 			<p:commandButton value="Salir" icon="ui-icon-account-circle"
 				actionListener="#{loginBean.setDialogRegistrarUsuario(false)}"
 				update=":dlgRegistrarse :frmLogin">
+			</p:commandButton>
+
+		</h:form>
+
+	</p:dialog>
+
+	<p:dialog id="dlgTransacciones" style="width: 70%; height: 70%;"
+		closeOnEscape="false" closable="false" header="Transacciones"
+		modal="true" resizable="false" 
+		visible="#{loginBean.isDialogTransacciones()}" appendTo="@(body)">
+
+		<h:form id="frmTransacciones">
+
+			<p:dataTable var="row" value="#{loginBean.listaTransacciones}"
+				paginator="true" rows="10" first="0"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" selectionMode="single"
+				selection="#{loginBean.transaccion}" rowKey="#{row.login}">
+
+				<f:facet name="header">LISTA DE USUARIOS</f:facet>
+
+
+				<p:column headerText="LOGIN" filterBy="#{row.login}"
+					filterMatchMode="contains">
+					<h:outputText value="#{row.login}" />
+				</p:column>
+
+				<p:column headerText="FECHA" filterBy="#{row.fecha}"
+					filterMatchMode="contains">
+					<h:outputText value="#{row.fecha}" />
+				</p:column>
+
+				<p:column headerText="DEPOSITO" filterBy="#{row.deposito}"
+					filterMatchMode="contains">
+					<h:outputText value="#{row.deposito}" />
+				</p:column>
+
+				<p:column headerText="RETIRO" filterBy="#{row.retiro}"
+					filterMatchMode="contains">
+					<h:outputText value="#{row.retiro}" />
+				</p:column>
+
+				<p:column headerText="SALDO" filterBy="#{row.saldo}"
+					filterMatchMode="contains">
+					<h:outputText value="#{row.saldo}" />
+				</p:column>
+
+
+
+			</p:dataTable>
+
+
+
+
+			<p:commandButton value="Salir" icon="ui-icon-account-circle"
+				actionListener="#{loginBean.setDialogTransacciones(false)}"
+				update=":dlgTransacciones :frmTransacciones">
 			</p:commandButton>
 
 		</h:form>

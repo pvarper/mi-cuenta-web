@@ -1,6 +1,9 @@
 package com.soe.bean;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
@@ -11,6 +14,7 @@ import javax.faces.context.FacesContext;
 
 import com.rest.client.RestClient;
 import com.soe.entity.Cliente;
+import com.soe.entity.Transaccion;
 
 @ManagedBean
 @ViewScoped
@@ -22,15 +26,21 @@ public class LoginBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean dialogDatosCuentaVisible;
 	private boolean dialogRegistrarUsuario;
+	private boolean dialogTransacciones;
 	public Cliente cliente;
+	public Transaccion transaccion;
 	private double monto;
+	private List<Transaccion> listaTransacciones;
 
 	@PostConstruct
 	public void init() {
 		try {
 			cliente = new Cliente();
+			transaccion = new Transaccion();
 			dialogDatosCuentaVisible = false;
 			dialogRegistrarUsuario = false;
+			dialogTransacciones=false;
+			listaTransacciones= new ArrayList<Transaccion>();
 
 		} catch (Exception e) {
 			// log.error("init|Fallo al inicializar la clase. " + e.getMessage());
@@ -91,6 +101,7 @@ public class LoginBean implements Serializable {
 		double saldoFinal=0;
 		if(deposito) {
 			saldoFinal=cliente.getSaldo()+this.monto;
+			//transaccion.setDeposito(this.monto);
 		}else {
 			if(monto>cliente.getSaldo()) {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR",
@@ -98,8 +109,16 @@ public class LoginBean implements Serializable {
 				return;
 			}
 			saldoFinal=cliente.getSaldo()-this.monto;
+		//	transaccion.setDeposito(-this.monto);
 		}
 		cliente.setSaldo(saldoFinal);
+		
+		//transaccion.setLogin(cliente.getLogin());
+		//transaccion.setFecha(new Timestamp(System.currentTimeMillis()));
+		//transaccion.setDeposito(this.monto);
+	//	transaccion.setSaldo(saldoFinal);
+		
+	//	restClient.guardarTransaccion(transaccion);
 
 		if (!restClient.eliminarClientePorLogin(cliente.getLogin())) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR",
@@ -154,6 +173,16 @@ public class LoginBean implements Serializable {
 
 		FacesContext.getCurrentInstance().addMessage(null,
 				new FacesMessage(FacesMessage.SEVERITY_INFO, "Editar", "Se edito correctamente"));
+		
+	}
+	
+	public void obtenerTransaccionPorLogin() {
+		
+		dialogTransacciones=true;
+		
+		RestClient restClient= new RestClient();
+		
+		listaTransacciones = restClient.obtenerTransaccionesPorLogin(cliente.getLogin());
 		
 	}
 
@@ -361,5 +390,31 @@ public class LoginBean implements Serializable {
 	public void setMonto(double monto) {
 		this.monto = monto;
 	}
+
+	public boolean isDialogTransacciones() {
+		return dialogTransacciones;
+	}
+
+	public void setDialogTransacciones(boolean dialogTransacciones) {
+		this.dialogTransacciones = dialogTransacciones;
+	}
+
+	public List<Transaccion> getListaTransacciones() {
+		return listaTransacciones;
+	}
+
+	public void setListaTransacciones(List<Transaccion> listaTransacciones) {
+		this.listaTransacciones = listaTransacciones;
+	}
+
+	public Transaccion getTransaccion() {
+		return transaccion;
+	}
+
+	public void setTransaccion(Transaccion transaccion) {
+		this.transaccion = transaccion;
+	}
+	
+	
 
 }
