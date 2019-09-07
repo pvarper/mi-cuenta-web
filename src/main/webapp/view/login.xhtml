@@ -157,7 +157,7 @@
 						</p:commandButton>
 					</h:panelGrid>
 					
-					<p:commandButton value="Ver Transacciones" icon="ui-icon-account-circle"
+				 	<p:commandButton value="Ver Transacciones" icon="ui-icon-account-circle"
 						actionListener="#{loginBean.obtenerTransaccionPorLogin()}"
 						update=":dlgRegistrarse :dlgTransacciones">
 
@@ -282,7 +282,7 @@
 				rowsPerPageTemplate="5,10,15" selectionMode="single"
 				selection="#{loginBean.transaccion}" rowKey="#{row.login}">
 
-				<f:facet name="header">LISTA DE USUARIOS</f:facet>
+				<f:facet name="header">LISTA DE TRANSACCIONES</f:facet>
 
 
 				<p:column headerText="LOGIN" filterBy="#{row.login}"

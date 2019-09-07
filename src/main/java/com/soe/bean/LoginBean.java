@@ -1,7 +1,6 @@
 package com.soe.bean;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -98,10 +97,11 @@ public class LoginBean implements Serializable {
 		}
 		
 		RestClient restClient = new RestClient();
+		transaccion= new Transaccion();
 		double saldoFinal=0;
 		if(deposito) {
 			saldoFinal=cliente.getSaldo()+this.monto;
-			//transaccion.setDeposito(this.monto);
+			transaccion.setDeposito(this.monto);
 		}else {
 			if(monto>cliente.getSaldo()) {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR",
@@ -109,16 +109,19 @@ public class LoginBean implements Serializable {
 				return;
 			}
 			saldoFinal=cliente.getSaldo()-this.monto;
-		//	transaccion.setDeposito(-this.monto);
+			transaccion.setRetiro(-this.monto);
 		}
-		cliente.setSaldo(saldoFinal);
+		cliente.setSaldo(saldoFinal);	
+		transaccion.setLogin(cliente.getLogin());
+		transaccion.setSaldo(saldoFinal);
 		
-		//transaccion.setLogin(cliente.getLogin());
-		//transaccion.setFecha(new Timestamp(System.currentTimeMillis()));
-		//transaccion.setDeposito(this.monto);
-	//	transaccion.setSaldo(saldoFinal);
 		
-	//	restClient.guardarTransaccion(transaccion);
+		
+		if (!restClient.guardarTransaccion(transaccion)) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR",
+					"Error Al guardar la transaccion del cliente: " + cliente.getLogin()));
+			return;
+		}
 
 		if (!restClient.eliminarClientePorLogin(cliente.getLogin())) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR",

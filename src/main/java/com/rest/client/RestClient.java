@@ -1,6 +1,5 @@
 package com.rest.client;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.client.Client;
